@@ -171,6 +171,20 @@ z3_func_decl_ast = #const Z3_FUNC_DECL_AST
 z3_unknown_ast :: Z3_ast_kind
 z3_unknown_ast = #const Z3_UNKNOWN_AST
 
+---------------------------------------------------------------------
+-- * Global parameters
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga9162ac23461bc67d1a0cde7c71f53111>
+foreign import ccall unsafe "Z3_global_param_set"
+    z3_global_param_set :: Z3_string -> Z3_string -> IO ()
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gab7a8590c613540b4b64e86f3f52527cb>
+foreign import ccall unsafe "Z3_global_param_reset_all"
+    z3_global_param_reset_all :: IO ()
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gaf999ce177439fe6780669e0636c2df6a>
+foreign import ccall unsafe "Z3_global_param_get"
+    z3_global_param_get :: Z3_string -> Ptr Z3_string -> IO Z3_bool
 
 ---------------------------------------------------------------------
 -- * Create configuration
@@ -264,6 +278,19 @@ foreign import ccall unsafe "Z3_mk_tuple_sort"
                      -> Ptr (Ptr Z3_func_decl)
                      -> Ptr (Ptr Z3_func_decl)
                      -> IO (Ptr Z3_sort)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gaded36e401f3090facf10ecfcfe30640f>
+foreign import ccall unsafe "Z3_mk_list_sort"
+    z3_mk_list_sort   :: Ptr Z3_context
+                      -> Ptr Z3_symbol
+                      -> Ptr Z3_sort
+                      -> Ptr (Ptr Z3_func_decl)
+                      -> Ptr (Ptr Z3_func_decl)
+                      -> Ptr (Ptr Z3_func_decl)
+                      -> Ptr (Ptr Z3_func_decl)
+                      -> Ptr (Ptr Z3_func_decl)
+                      -> Ptr (Ptr Z3_func_decl)
+                      -> IO (Ptr Z3_sort)
 
 -- | Reference <http://z3prover.github.io/api/html/group__capi.html#gaa779e39f7050b9d51857887954b5f9b0>
 foreign import ccall unsafe "Z3_mk_constructor"
@@ -753,6 +780,136 @@ foreign import ccall unsafe "Z3_mk_int64"
 -- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga88a165138162a8bac401672f0a1b7891>
 foreign import ccall unsafe "Z3_mk_unsigned_int64"
     z3_mk_unsigned_int64 :: Ptr Z3_context -> CULLong -> Ptr Z3_sort ->  IO (Ptr Z3_ast)
+
+---------------------------------------------------------------------
+-- * Sequences and regular expressions
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gac1532be94f771bfc2cf7070586ed94e6>
+foreign import ccall unsafe "Z3_mk_seq_sort"
+    z3_mk_seq_sort :: Ptr Z3_context -> Ptr Z3_sort -> IO (Ptr Z3_sort)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga2db3bb3c30bf6c97cfd5e5ec3bb1c76b>
+foreign import ccall unsafe "Z3_is_seq_sort"
+    z3_is_seq_sort :: Ptr Z3_context -> Ptr Z3_sort -> IO Z3_bool
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga5eeae555f058af3adac5a744894a80f9>
+foreign import ccall unsafe "Z3_mk_re_sort"
+    z3_mk_re_sort :: Ptr Z3_context -> Ptr Z3_sort -> IO (Ptr Z3_sort)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gad4f4d19b25d4519a48dd04f96df30f44>
+foreign import ccall unsafe "Z3_is_re_sort"
+    z3_is_re_sort :: Ptr Z3_context -> Ptr Z3_sort -> IO Z3_bool
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gaf85f3ec4cb347aa5cf5284fac5a73601>
+foreign import ccall unsafe "Z3_mk_string_sort"
+    z3_mk_string_sort :: Ptr Z3_context -> IO (Ptr Z3_sort)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gabd8ad44ca663c7f2cd6503b9d5c1ddfd>
+foreign import ccall unsafe "Z3_is_string_sort"
+    z3_is_string_sort :: Ptr Z3_context -> Ptr Z3_sort -> IO Z3_bool
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gabf2fa2e9578b7b496b87cabf3a245ad8>
+foreign import ccall unsafe "Z3_mk_string"
+    z3_mk_string :: Ptr Z3_context -> Z3_string -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gac7119512579005765df6e8e30ac338e5>
+foreign import ccall unsafe "Z3_is_string"
+    z3_is_string :: Ptr Z3_context -> Ptr Z3_ast -> IO Z3_bool
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gaad14cc692df2f9385dcc563da0c8f0bb>
+foreign import ccall unsafe "Z3_get_string"
+    z3_get_string :: Ptr Z3_context -> Ptr Z3_ast -> IO Z3_string
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga6c4aa6c88b5cda81c174b547b52588e4>
+foreign import ccall unsafe "Z3_mk_seq_empty"
+    z3_mk_seq_empty :: Ptr Z3_context -> Ptr Z3_sort -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga5b0d6a0d8bd71263c20b40e762927b0d>
+foreign import ccall unsafe "Z3_mk_seq_unit"
+    z3_mk_seq_unit :: Ptr Z3_context -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga843836100fa1424aa006802802d9d796>
+foreign import ccall unsafe "Z3_mk_seq_concat"
+    z3_mk_seq_concat :: Ptr Z3_context -> CUInt -> Ptr (Ptr Z3_ast) -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga8934c5c582b8411abd35ed176b58d3be>
+foreign import ccall unsafe "Z3_mk_seq_prefix"
+    z3_mk_seq_prefix :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga6d59844763459fbd4eecdf94b9b4f426>
+foreign import ccall unsafe "Z3_mk_seq_suffix"
+    z3_mk_seq_suffix :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gafdae7a256d07df4ef72baf8c9b20811b>
+foreign import ccall unsafe "Z3_mk_seq_contains"
+    z3_mk_seq_contains :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gadac00a0fc822e7b2d84ced87a421bae3>
+foreign import ccall unsafe "Z3_mk_seq_extract"
+    z3_mk_seq_extract :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga119e6de9d11c7ecce24700741bb6fe1b>
+foreign import ccall unsafe "Z3_mk_seq_replace"
+    z3_mk_seq_replace :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga364b6a7f198511bca832403bc5342bfd>
+foreign import ccall unsafe "Z3_mk_seq_at"
+    z3_mk_seq_at :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga2a4510df75885b37a51bf752ae510c4b>
+foreign import ccall unsafe "Z3_mk_seq_length"
+    z3_mk_seq_length :: Ptr Z3_context -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga83a5d1f9721c30d397ee27521ef59372>
+foreign import ccall unsafe "Z3_mk_seq_index"
+    z3_mk_seq_index :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga2ffdd46dd305ae30ca9244bc64b5b425>
+foreign import ccall unsafe "Z3_mk_str_to_int"
+    z3_mk_str_to_int :: Ptr Z3_context -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gae017a6bbc6a7b20dc74fcc31ec8cbef9>
+foreign import ccall unsafe "Z3_mk_int_to_str"
+    z3_mk_int_to_str :: Ptr Z3_context -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga82a10c6fecff4619c6ac801145ec862f>
+foreign import ccall unsafe "Z3_mk_seq_to_re"
+    z3_mk_seq_to_re :: Ptr Z3_context -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gad10eca0d7467280e70c0fff5b7d35c2c>
+foreign import ccall unsafe "Z3_mk_seq_in_re"
+    z3_mk_seq_in_re :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gab1e5723779bbc742f16398392376834a>
+foreign import ccall unsafe "Z3_mk_re_plus"
+    z3_mk_re_plus :: Ptr Z3_context -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga928991fda53ed0bd13b3336c500e3eec>
+foreign import ccall unsafe "Z3_mk_re_star"
+    z3_mk_re_star :: Ptr Z3_context -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga0dd64199822f151d0b894a945bc660e7>
+foreign import ccall unsafe "Z3_mk_re_option"
+    z3_mk_re_option :: Ptr Z3_context -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga68bb6dbc568e31a311da8824429020c0>
+foreign import ccall unsafe "Z3_mk_re_union"
+    z3_mk_re_union :: Ptr Z3_context -> CUInt -> Ptr (Ptr Z3_ast) -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gac67af55654cf491b2d5aa63125eb2b13>
+foreign import ccall unsafe "Z3_mk_re_concat"
+    z3_mk_re_concat :: Ptr Z3_context -> CUInt -> Ptr (Ptr Z3_ast) -> IO (Ptr Z3_ast)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga84bf5de3ef5846e34e0e4555dce12bbd>
+foreign import ccall unsafe "Z3_mk_re_range"
+    z3_mk_re_range :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- TODO:
+-- z3_mk_re_loop
+-- z3_mk_re_intersect
+-- z3_mk_re_complement
+-- z3_mk_re_empty
+-- z3_mk_re_full
 
 ---------------------------------------------------------------------
 -- * Quantifiers

@@ -206,6 +206,37 @@ module Z3.Monad
   , mkBitvector
   , mkBvNum
 
+  -- * Sequences and regular expressions
+  , mkSeqSort
+  , isSeqSort
+  , mkReSort
+  , isReSort
+  , mkStringSort
+  , mkString
+  , isStringSort
+  , getString
+  , mkSeqEmpty
+  , mkSeqUnit
+  , mkSeqConcat
+  , mkSeqPrefix
+  , mkSeqSuffix
+  , mkSeqContains
+  , mkSeqExtract
+  , mkSeqReplace
+  , mkSeqAt
+  , mkSeqLength
+  , mkSeqIndex
+  , mkStrToInt
+  , mkIntToStr
+  , mkSeqToRe
+  , mkSeqInRe
+  , mkRePlus
+  , mkReStar
+  , mkReOption
+  , mkReUnion
+  , mkReConcat
+  , mkReRange
+
   -- * Quantifiers
   , mkPattern
   , mkBound
@@ -1463,6 +1494,96 @@ mkBvNum :: (MonadZ3 z3, Integral i) => Int    -- ^ bit-width
                                     -> i      -- ^ integer value
                                     -> z3 AST
 mkBvNum = liftFun2 Base.mkBvNum
+
+---------------------------------------------------------------------
+-- Sequences and regular expressions
+
+mkSeqSort :: MonadZ3 z3 => Sort -> z3 Sort
+mkSeqSort = liftFun1 Base.mkSeqSort
+
+isSeqSort :: MonadZ3 z3 => Sort -> z3 Bool
+isSeqSort = liftFun1 Base.isSeqSort
+
+mkReSort :: MonadZ3 z3 => Sort -> z3 Sort
+mkReSort = liftFun1 Base.mkReSort
+
+isReSort :: MonadZ3 z3 => Sort -> z3 Bool
+isReSort = liftFun1 Base.isReSort
+
+mkStringSort :: MonadZ3 z3 => z3 Sort
+mkStringSort = liftScalar Base.mkStringSort
+
+mkString :: MonadZ3 z3 => String -> z3 AST
+mkString = liftFun1 Base.mkString
+
+isStringSort :: MonadZ3 z3 => Sort -> z3 Bool
+isStringSort = liftFun1 Base.isStringSort
+
+getString :: MonadZ3 z3 => AST -> z3 String
+getString = liftFun1 Base.getString
+
+mkSeqEmpty :: MonadZ3 z3 => Sort -> z3 AST
+mkSeqEmpty = liftFun1 Base.mkSeqEmpty
+
+mkSeqUnit :: MonadZ3 z3 => AST -> z3 AST
+mkSeqUnit = liftFun1 Base.mkSeqUnit
+
+mkSeqConcat :: MonadZ3 z3 => [AST] -> z3 AST
+mkSeqConcat = liftFun1 Base.mkSeqConcat
+
+mkSeqPrefix :: MonadZ3 z3 => AST -> AST -> z3 AST
+mkSeqPrefix = liftFun2 Base.mkSeqPrefix
+
+mkSeqSuffix :: MonadZ3 z3 => AST -> AST -> z3 AST
+mkSeqSuffix = liftFun2 Base.mkSeqSuffix
+
+mkSeqContains :: MonadZ3 z3 => AST -> AST -> z3 AST
+mkSeqContains = liftFun2 Base.mkSeqContains
+
+mkSeqExtract :: MonadZ3 z3 => AST -> AST -> AST -> z3 AST
+mkSeqExtract = liftFun3 Base.mkSeqExtract
+
+mkSeqReplace :: MonadZ3 z3 => AST -> AST -> AST -> z3 AST
+mkSeqReplace = liftFun3 Base.mkSeqReplace
+
+mkSeqAt :: MonadZ3 z3 => AST -> AST -> z3 AST
+mkSeqAt = liftFun2 Base.mkSeqAt
+
+mkSeqLength :: MonadZ3 z3 => AST -> z3 AST
+mkSeqLength = liftFun1 Base.mkSeqLength
+
+mkSeqIndex :: MonadZ3 z3 => AST -> AST -> AST -> z3 AST
+mkSeqIndex = liftFun3 Base.mkSeqIndex
+
+mkStrToInt :: MonadZ3 z3 => AST -> z3 AST
+mkStrToInt = liftFun1 Base.mkStrToInt
+
+mkIntToStr :: MonadZ3 z3 => AST -> z3 AST
+mkIntToStr = liftFun1 Base.mkIntToStr
+
+mkSeqToRe :: MonadZ3 z3 => AST -> z3 AST
+mkSeqToRe = liftFun1 Base.mkSeqToRe
+
+mkSeqInRe :: MonadZ3 z3 => AST -> AST -> z3 AST
+mkSeqInRe = liftFun2 Base.mkSeqInRe
+
+mkRePlus :: MonadZ3 z3 => AST -> z3 AST
+mkRePlus = liftFun1 Base.mkRePlus
+
+mkReStar :: MonadZ3 z3 => AST -> z3 AST
+mkReStar = liftFun1 Base.mkReStar
+
+mkReOption :: MonadZ3 z3 => AST -> z3 AST
+mkReOption = liftFun1 Base.mkReOption
+
+mkReUnion :: MonadZ3 z3 => [AST] -> z3 AST
+mkReUnion = liftFun1 Base.mkReUnion
+
+mkReConcat :: MonadZ3 z3 => [AST] -> z3 AST
+mkReConcat = liftFun1 Base.mkReConcat
+
+mkReRange :: MonadZ3 z3 => AST -> AST -> z3 AST
+mkReRange = liftFun2 Base.mkReRange
 
 ---------------------------------------------------------------------
 -- Quantifiers
