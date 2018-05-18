@@ -454,6 +454,7 @@ module Z3.Base (
   , solverGetNumScopes
   , solverAssertCnstr
   , solverAssertAndTrack
+  , solverGetAssertions
   , solverCheck
   , solverCheckAssumptions
   , solverGetModel
@@ -3018,6 +3019,9 @@ solverAssertCnstr = liftFun2 z3_solver_assert
 
 solverAssertAndTrack :: Context -> Solver -> AST -> AST -> IO ()
 solverAssertAndTrack = liftFun3 z3_solver_assert_and_track
+
+solverGetAssertions :: Context -> Solver -> IO [AST]
+solverGetAssertions = liftFun1 z3_solver_get_assertions
 
 -- | Check whether the assertions in a given solver are consistent or not.
 solverCheck :: Context -> Solver -> IO Result

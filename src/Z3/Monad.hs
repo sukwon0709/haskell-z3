@@ -404,6 +404,7 @@ module Z3.Monad
   , solverGetNumScopes
   , solverAssertCnstr
   , solverAssertAndTrack
+  , solverGetAssertions
   , solverCheck
   , solverCheckAssumptions
   , solverGetModel
@@ -553,7 +554,7 @@ liftFixedpoint2 f a b = do
 -- A simple Z3 monad.
 
 newtype Z3 a = Z3 { _unZ3 :: ReaderT Z3Env IO a }
-    deriving (Functor, Applicative, Monad, MonadBase IO, MonadIO, MonadThrow, MonadFix)
+    deriving (Functor, Applicative, Monad, MonadBase IO, MonadIO, MonadCatch, MonadMask, MonadThrow, MonadFix)
 
 -- | Z3 environment.
 data Z3Env
@@ -2236,6 +2237,9 @@ solverAssertCnstr = liftSolver1 Base.solverAssertCnstr
 -- Boolean literals provided using Z3_solver_check_assumptions.
 solverAssertAndTrack :: MonadZ3 z3 => AST -> AST -> z3 ()
 solverAssertAndTrack = liftSolver2 Base.solverAssertAndTrack
+
+solverGetAssertions :: MonadZ3 z3 => z3 [AST]
+solverGetAssertions = liftSolver0 Base.solverGetAssertions
 
 -- | Check whether the assertions in a given solver are consistent or not.
 solverCheck :: MonadZ3 z3 => z3 Result
