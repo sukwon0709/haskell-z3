@@ -1,5 +1,6 @@
 
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE TypeFamilies #-}
 
 -- |
 -- Module    : Z3.Monad
@@ -453,6 +454,9 @@ import Z3.Base
   )
 import qualified Z3.Base as Base
 
+import Control.Monad.Base
+import Control.Monad.Catch
+import Control.Monad.Trans.Control
 import Control.Applicative ( Applicative )
 import Data.Fixed ( Fixed, HasResolution )
 import Control.Monad.Reader ( ReaderT, runReaderT, asks )
@@ -549,7 +553,7 @@ liftFixedpoint2 f a b = do
 -- A simple Z3 monad.
 
 newtype Z3 a = Z3 { _unZ3 :: ReaderT Z3Env IO a }
-    deriving (Functor, Applicative, Monad, MonadIO, MonadFix)
+    deriving (Functor, Applicative, Monad, MonadBase IO, MonadIO, MonadThrow, MonadFix)
 
 -- | Z3 environment.
 data Z3Env
@@ -565,6 +569,11 @@ instance MonadZ3 Z3 where
 
 instance MonadFixedpoint Z3 where
   getFixedpoint = Z3 $ asks envFixedpoint
+
+instance MonadBaseControl IO Z3 where
+  type StM Z3 a = a
+  liftBaseWith f = Z3 $ liftBaseWith $ \q -> f (q . _unZ3)
+  restoreM = Z3 . restoreM
 
 -- | Eval a Z3 script.
 evalZ3With :: Maybe Logic -> Opts -> Z3 a -> IO a
