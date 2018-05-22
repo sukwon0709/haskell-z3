@@ -328,6 +328,7 @@ module Z3.Monad
   , evalInt
   , evalReal
   , evalBv
+  , evalString
   , evalT
   , mapEval
   , FuncModel(..)
@@ -1983,6 +1984,9 @@ evalReal = liftFun2 Base.evalReal
 evalBv :: MonadZ3 z3 => Bool -- ^ signed?
                      -> EvalAst z3 Integer
 evalBv = liftFun3 Base.evalBv
+
+evalString :: MonadZ3 z3 => EvalAst z3 String
+evalString = liftFun2 Base.evalString
 
 -- | Evaluate a collection of AST nodes in the given model.
 evalT :: (MonadZ3 z3,Traversable t) => Model -> t AST -> z3 (Maybe (t AST))

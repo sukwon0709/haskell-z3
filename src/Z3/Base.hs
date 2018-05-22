@@ -373,6 +373,7 @@ module Z3.Base (
   , evalInt
   , evalReal
   , evalBv
+  , evalString
   , mapEval
   , evalT
   , FuncModel (..)
@@ -2379,6 +2380,9 @@ evalBv :: Context -> Bool -- ^ signed?
                   -> EvalAst Integer
 evalBv ctx signed m ast =
   eval ctx m ast >>= T.traverse (\a -> getBv ctx a signed)
+
+evalString :: Context -> EvalAst String
+evalString ctx m ast = eval ctx m ast >>= T.traverse (getString ctx)
 
 -- | Evaluate a /collection/ of AST nodes in the given model.
 evalT :: Traversable t => Context -> Model -> t AST -> IO (Maybe (t AST))
