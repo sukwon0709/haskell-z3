@@ -1429,6 +1429,10 @@ foreign import ccall unsafe "Z3_tactic_and_then"
 foreign import ccall unsafe "Z3_tactic_or_else"
     z3_tactic_or_else :: Ptr Z3_context -> Ptr Z3_tactic -> Ptr Z3_tactic -> IO (Ptr Z3_tactic)
 
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga63d42fcb33ba37b44753cfaf53aa0d7d>
+foreign import ccall unsafe "Z3_tactic_par_or"
+    z3_tactic_par_or :: Ptr Z3_context -> CUInt -> Ptr (Ptr Z3_tactic) -> IO (Ptr Z3_tactic)
+
 -- | Reference: <https://z3prover.github.io/api/html/group__capi.html#gab940c1401643ece97517ff27838313c4>
 foreign import ccall unsafe "Z3_tactic_skip"
     z3_tactic_skip :: Ptr Z3_context -> IO (Ptr Z3_tactic)
@@ -1436,6 +1440,22 @@ foreign import ccall unsafe "Z3_tactic_skip"
 -- | Reference: <https://z3prover.github.io/api/html/group__capi.html#gac0670bd04fa76af71b2abbc2f8b62889>
 foreign import ccall unsafe "Z3_tactic_try_for"
     z3_tactic_try_for :: Ptr Z3_context -> Ptr Z3_tactic -> CUInt -> IO (Ptr Z3_tactic)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gaea3226206dc8dd1b40e461e8ba0e1047>
+foreign import ccall unsafe "Z3_tactic_repeat"
+    z3_tactic_repeat :: Ptr Z3_context -> Ptr Z3_tactic -> CUInt -> IO (Ptr Z3_tactic)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga5d255774351109748c2ef75f3fcf6c67>
+foreign import ccall unsafe "Z3_tactic_fail"
+    z3_tactic_fail :: Ptr Z3_context -> IO (Ptr Z3_tactic)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga4e3cd975d7895ebb8bc92ff23b652e07>
+foreign import ccall unsafe "Z3_tactic_fail_if_not_decided"
+    z3_tactic_fail_if_not_decided :: Ptr Z3_context -> IO (Ptr Z3_tactic)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga0a94222a6456db3742db7736bad4f697>
+foreign import ccall unsafe "Z3_tactic_using_params"
+    z3_tactic_using_params :: Ptr Z3_context -> Ptr Z3_tactic -> Ptr Z3_params -> IO (Ptr Z3_tactic)
 
 -- | Reference: <https://z3prover.github.io/api/html/group__capi.html#gabd0874d8777b3bc426782a87c04206b9>
 foreign import ccall unsafe "Z3_tactic_inc_ref"
@@ -1503,6 +1523,10 @@ foreign import ccall unsafe "Z3_mk_simple_solver"
 -- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga54244cfc9d9cd2ca8f08c3909d700628>
 foreign import ccall unsafe "Z3_mk_solver_for_logic"
     z3_mk_solver_for_logic :: Ptr Z3_context -> Ptr Z3_symbol -> IO (Ptr Z3_solver)
+
+-- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga3cd1b64f6812def11b200dc4a05d2abb>
+foreign import ccall unsafe "Z3_mk_solver_from_tactic"
+    z3_mk_solver_from_tactic :: Ptr Z3_context -> Ptr Z3_tactic -> IO (Ptr Z3_solver)
 
 -- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga047bb9dff9d57c7d3a71b7af4555956b>
 foreign import ccall unsafe "Z3_solver_get_help"

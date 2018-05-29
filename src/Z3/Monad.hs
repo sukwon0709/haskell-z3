@@ -27,6 +27,7 @@ module Z3.Monad
   , newEnv
   , newItpEnv
   , evalZ3WithEnv
+  , evalZ3WithTactic
 
   -- * Types
   , Symbol
@@ -338,8 +339,13 @@ module Z3.Monad
   , mkTactic
   , andThenTactic
   , orElseTactic
+  , parOrTactic
   , skipTactic
   , tryForTactic
+  , repeatTactic
+  , failTactic
+  , failIfNotDecidedTactic
+  , usingParamsTactic
   , mkQuantifierEliminationTactic
   , mkAndInverterGraphTactic
   , applyTactic
@@ -616,6 +622,30 @@ evalZ3WithEnv :: Z3 a
               -> Z3Env
               -> IO a
 evalZ3WithEnv (Z3 s) = runReaderT s
+
+evalZ3WithTactic :: (Base.Context -> IO Tactic) -> Opts -> Z3 a -> IO a
+evalZ3WithTactic mkTactic opts (Z3 s) = do
+  env <- newEnvWithTactic Base.mkContext mkTactic opts
+  runReaderT s env
+
+newEnvWithTactic ::
+     (Base.Config -> IO Base.Context)
+  -> (Base.Context -> IO Tactic)
+  -> Opts
+  -> IO Z3Env
+newEnvWithTactic mkContext mkTactic opts =
+  Base.withConfig $ \cfg -> do
+    setOpts cfg opts
+    ctx <- mkContext cfg
+    tactic <- mkTactic ctx
+    solver <- Base.mkSolverFromTactic ctx tactic
+    fixedpoint <- Base.mkFixedpoint ctx
+    return $ Z3Env solver ctx fixedpoint
+
+
+
+
+
 
 ---------------------------------------------------------------------
 -- * Parameters
@@ -2020,11 +2050,26 @@ andThenTactic = liftFun2 Base.andThenTactic
 orElseTactic :: MonadZ3 z3 => Tactic -> Tactic -> z3 Tactic
 orElseTactic = liftFun2 Base.andThenTactic
 
+parOrTactic :: MonadZ3 z3 => [Tactic] -> z3 Tactic
+parOrTactic = liftFun1 Base.parOrTactic
+
 skipTactic :: MonadZ3 z3 => z3 Tactic
 skipTactic = liftScalar Base.skipTactic
 
 tryForTactic :: MonadZ3 z3 => Tactic -> Int -> z3 Tactic
 tryForTactic = liftFun2 Base.tryForTactic
+
+repeatTactic :: MonadZ3 z3 => Tactic -> Int -> z3 Tactic
+repeatTactic = liftFun2 Base.repeatTactic
+
+failTactic :: MonadZ3 z3 => z3 Tactic
+failTactic = liftScalar Base.failTactic
+
+failIfNotDecidedTactic :: MonadZ3 z3 => z3 Tactic
+failIfNotDecidedTactic = liftScalar Base.failIfNotDecidedTactic
+
+usingParamsTactic :: MonadZ3 z3 => Tactic -> Params -> z3 Tactic
+usingParamsTactic = liftFun2 Base.usingParamsTactic
 
 mkQuantifierEliminationTactic :: MonadZ3 z3 => z3 Tactic
 mkQuantifierEliminationTactic = liftScalar Base.mkQuantifierEliminationTactic

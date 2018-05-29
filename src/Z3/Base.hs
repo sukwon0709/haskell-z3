@@ -383,8 +383,13 @@ module Z3.Base (
   , mkTactic
   , andThenTactic
   , orElseTactic
+  , parOrTactic
   , skipTactic
   , tryForTactic
+  , repeatTactic
+  , failTactic
+  , failIfNotDecidedTactic
+  , usingParamsTactic
   , mkQuantifierEliminationTactic
   , mkAndInverterGraphTactic
   , applyTactic
@@ -447,6 +452,7 @@ module Z3.Base (
   , mkSolver
   , mkSimpleSolver
   , mkSolverForLogic
+  , mkSolverFromTactic
   , solverGetHelp
   , solverSetParams
   , solverPush
@@ -2511,11 +2517,28 @@ andThenTactic = liftFun2 z3_tactic_and_then
 orElseTactic :: Context -> Tactic -> Tactic -> IO Tactic
 orElseTactic = liftFun2 z3_tactic_or_else
 
+parOrTactic :: Context -> [Tactic] -> IO Tactic
+parOrTactic ctx tactics =
+  marshal z3_tactic_par_or ctx $ \f ->
+    marshalArrayLen tactics $ \numTactics tacticsArr -> f numTactics tacticsArr
+
 skipTactic :: Context -> IO Tactic
 skipTactic = liftFun0 z3_tactic_skip
 
 tryForTactic :: Context -> Tactic -> Int -> IO Tactic
 tryForTactic = liftFun2 z3_tactic_try_for
+
+repeatTactic :: Context -> Tactic -> Int -> IO Tactic
+repeatTactic = liftFun2 z3_tactic_repeat
+
+failTactic :: Context -> IO Tactic
+failTactic = liftFun0 z3_tactic_fail
+
+failIfNotDecidedTactic :: Context -> IO Tactic
+failIfNotDecidedTactic = liftFun0 z3_tactic_fail_if_not_decided
+
+usingParamsTactic :: Context -> Tactic -> Params -> IO Tactic
+usingParamsTactic = liftFun2 z3_tactic_using_params
 
 mkQuantifierEliminationTactic :: Context -> IO Tactic
 mkQuantifierEliminationTactic ctx = mkTactic ctx "qe"
@@ -2996,6 +3019,12 @@ mkSimpleSolver = liftFun0 z3_mk_simple_solver
 mkSolverForLogic :: Context -> Logic -> IO Solver
 mkSolverForLogic c logic = mkStringSymbol c (show logic) >>= \sym ->
   toHsCheckError c $ \cPtr -> z3_mk_solver_for_logic cPtr $ unSymbol sym
+
+mkSolverFromTactic :: Context -> Tactic -> IO Solver
+mkSolverFromTactic c tactic =
+  toHsCheckError c $ \cPtr ->
+    withForeignPtr (unTactic tactic) $ \tacticPtr ->
+      z3_mk_solver_from_tactic cPtr tacticPtr
 
 -- | Return a string describing all solver available parameters.
 solverGetHelp :: Context -> Solver -> IO String
