@@ -50,7 +50,6 @@ a Z3_context and only delete it when this count reaches /zero/.
 
 -}
 module Z3.Base
-  -- * Types
   ( Config
   , Context
   , Symbol

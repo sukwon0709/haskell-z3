@@ -13,7 +13,6 @@
 --
 -- Examples: <https://bitbucket.org/iago/z3-haskell/src/tip/examples/Example/Monad>
 module Z3.Monad
-    -- * Z3 monad
   ( MonadZ3(..)
   , Z3
   , module Z3.Opts
