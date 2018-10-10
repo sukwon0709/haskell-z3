@@ -442,6 +442,7 @@ import Control.Monad ((>=>), forM, join, when)
 import Data.Fixed (Fixed, HasResolution)
 import Data.IORef (IORef, atomicModifyIORef', newIORef)
 import Data.Int
+import Data.List.NonEmpty (NonEmpty(..), nonEmpty, toList)
 import Data.Maybe (fromJust)
 import Data.Ratio ((%), denominator, numerator)
 import Data.Traversable (Traversable)
@@ -1064,8 +1065,7 @@ mkEq = liftFun2 z3_mk_eq
 --
 -- That is, @and [ args!!i /= args!!j | i <- [0..length(args)-1], j <- [i+1..length(args)-1] ]@
 mkDistinct :: Context -> [AST] -> IO AST
-mkDistinct =
-  liftAstN "Z3.Base.mkDistinct: empty list of expressions" z3_mk_distinct
+mkDistinct = liftAstN' z3_mk_true z3_mk_distinct
 
 -- | Create an AST node representing /not(a)/.
 mkNot :: Context -> AST -> IO AST
@@ -1089,13 +1089,11 @@ mkXor = liftFun2 z3_mk_xor
 
 -- | Create an AST node representing args[0] and ... and args[num_args-1].
 mkAnd :: Context -> [AST] -> IO AST
-mkAnd ctx [] = mkTrue ctx
-mkAnd ctx as = marshal z3_mk_and ctx $ marshalArrayLen as
+mkAnd = liftAstN' z3_mk_true z3_mk_and
 
 -- | Create an AST node representing args[0] or ... or args[num_args-1].
 mkOr :: Context -> [AST] -> IO AST
-mkOr ctx [] = mkFalse ctx
-mkOr ctx os = marshal z3_mk_or ctx $ marshalArrayLen os
+mkOr = liftAstN' z3_mk_false z3_mk_or
 
 -------------------------------------------------
 -- ** Helpers
@@ -1108,11 +1106,11 @@ mkBool ctx True = mkTrue ctx
 -- Arithmetic: Integers and Reals
 -- | Create an AST node representing args[0] + ... + args[num_args-1].
 mkAdd :: Context -> [AST] -> IO AST
-mkAdd = liftAstN "Z3.Base.mkAdd: empty list of expressions" z3_mk_add
+mkAdd ctx = maybe (mkInteger ctx 0) (liftAstN1 z3_mk_add ctx) . nonEmpty
 
 -- | Create an AST node representing args[0] * ... * args[num_args-1].
 mkMul :: Context -> [AST] -> IO AST
-mkMul = liftAstN "Z3.Base.mkMul: empty list of expressions" z3_mk_mul
+mkMul ctx = maybe (mkInteger ctx 1) (liftAstN1 z3_mk_mul ctx) . nonEmpty
 
 -- | Create an AST node representing args[0] - ... - args[num_args - 1].
 mkSub :: Context -> [AST] -> IO AST
@@ -2975,6 +2973,23 @@ marshalMaybeArray ::
 marshalMaybeArray Nothing f = f nullPtr
 marshalMaybeArray (Just hs) f = marshalArray hs f
 
+liftAstN' ::
+     (Ptr Z3_context -> IO (Ptr Z3_ast))
+  -> (Ptr Z3_context -> CUInt -> Ptr (Ptr Z3_ast) -> IO (Ptr Z3_ast))
+  -> Context
+  -> [AST]
+  -> IO AST
+liftAstN' s f c = maybe (liftFun0 s c) (liftAstN1 f c) . nonEmpty
+
+{-# INLINE liftAstN' #-}
+liftAstN1 ::
+     (Ptr Z3_context -> CUInt -> Ptr (Ptr Z3_ast) -> IO (Ptr Z3_ast))
+  -> Context
+  -> NonEmpty AST
+  -> IO AST
+liftAstN1 f c = marshal f c . marshalArrayLen . toList
+
+{-# INLINE liftAstN1 #-}
 liftAstN ::
      String
   -> (Ptr Z3_context -> CUInt -> Ptr (Ptr Z3_ast) -> IO (Ptr Z3_ast))
