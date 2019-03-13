@@ -381,6 +381,9 @@ module Z3.Base
   , getGoalSize
   , getGoalFormula
   , getGoalFormulas
+  -- * Interaction Logging
+  , openLog
+  , closeLog
   -- * String Conversion
   , ASTPrintMode(..)
   , setASTPrintMode
@@ -1659,7 +1662,7 @@ mkSeqExtract :: Context -> AST -> AST -> AST -> IO AST
 mkSeqExtract = liftFun3 z3_mk_seq_extract
 
 mkSeqReplace :: Context -> AST -> AST -> AST -> IO AST
-mkSeqReplace = liftFun3 z3_mk_seq_extract
+mkSeqReplace = liftFun3 z3_mk_seq_replace
 
 mkSeqAt :: Context -> AST -> AST -> IO AST
 mkSeqAt = liftFun2 z3_mk_seq_at
@@ -2430,8 +2433,13 @@ evalFunc ctx m fDecl = do
 
 ---------------------------------------------------------------------
 -- Interaction logging
--- TODO
 ---------------------------------------------------------------------
+openLog :: String -> IO Bool
+openLog n = withCString n $ \cs -> c2h undefined =<< z3_open_log cs
+
+closeLog :: IO ()
+closeLog = z3_close_log
+
 -- String Conversion
 -- | Pretty-printing mode for converting ASTs to strings.  The mode
 -- can be one of the following:

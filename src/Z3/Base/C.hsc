@@ -1559,6 +1559,15 @@ foreign import ccall unsafe "Z3_solver_to_string"
     z3_solver_to_string :: Ptr Z3_context -> Ptr Z3_solver -> IO Z3_string
 
 ---------------------------------------------------------------------
+-- * Interaction logging
+
+foreign import ccall unsafe "Z3_open_log"
+    z3_open_log :: Z3_string -> IO Z3_bool
+
+foreign import ccall unsafe "Z3_close_log"
+    z3_close_log :: IO ()
+
+---------------------------------------------------------------------
 -- * String Conversion
 
 -- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga20d66dac19b6d6a06537843d0e25f761>

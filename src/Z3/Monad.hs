@@ -339,6 +339,9 @@ module Z3.Monad
   , getGoalSize
   , getGoalFormula
   , getGoalFormulas
+  -- * Interaction Logging
+  , openLog
+  , closeLog
   -- * String Conversion
   , ASTPrintMode(..)
   , setASTPrintMode
@@ -2092,6 +2095,14 @@ getGoalFormula = liftFun2 Base.getGoalFormula
 
 getGoalFormulas :: MonadZ3 z3 => Goal -> z3 [AST]
 getGoalFormulas = liftFun1 Base.getGoalFormulas
+
+---------------------------------------------------------------------
+-- Interaction Logging
+openLog :: MonadZ3 z3 => String -> z3 Bool
+openLog = liftIO . Base.openLog
+
+closeLog :: MonadZ3 z3 => z3 ()
+closeLog = liftIO Base.closeLog
 
 ---------------------------------------------------------------------
 -- String Conversion
