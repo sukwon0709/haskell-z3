@@ -428,6 +428,7 @@ import Z3.Base
 import qualified Z3.Base as Base
 import Z3.Opts
 
+import Control.Monad.Fail
 import Control.Applicative (Applicative)
 import Control.Monad.Base
 import Control.Monad.Catch
@@ -580,6 +581,9 @@ instance MonadBaseControl IO Z3 where
   type StM Z3 a = a
   liftBaseWith f = Z3 $ liftBaseWith $ \q -> f (q . _unZ3)
   restoreM = Z3 . restoreM
+
+instance MonadFail Z3 where
+  fail = error
 
 -- | Eval a Z3 script.
 evalZ3With :: Maybe Logic -> Opts -> Z3 a -> IO a

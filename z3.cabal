@@ -76,7 +76,9 @@ Library
                          GeneralizedNewtypeDeriving
                          PatternGuards
 
+    include-dirs:        /home/soh/z3/include
     includes:            z3.h
+    extra-lib-dirs:      /home/soh/z3/lib
 
     -- In OS X libz3 is linked statically against libgomp.
     -- In Windows Z3 is compiled using MS C++.
