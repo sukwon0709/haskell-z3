@@ -404,8 +404,6 @@ module Z3.Base
   -- * Fixedpoint
   , Fixedpoint(..)
   , mkFixedpoint
-  , fixedpointPush
-  , fixedpointPop
   , fixedpointAddRule
   , fixedpointSetParams
   , fixedpointRegisterRelation
@@ -2715,12 +2713,6 @@ instance Marshal Fixedpoint (Ptr Z3_fixedpoint) where
 
 mkFixedpoint :: Context -> IO Fixedpoint
 mkFixedpoint = liftFun0 z3_mk_fixedpoint
-
-fixedpointPush :: Context -> Fixedpoint -> IO ()
-fixedpointPush = liftFun1 z3_fixedpoint_push
-
-fixedpointPop :: Context -> Fixedpoint -> IO ()
-fixedpointPop = liftFun1 z3_fixedpoint_pop
 
 fixedpointAddRule :: Context -> Fixedpoint -> AST -> Symbol -> IO ()
 fixedpointAddRule = liftFun3 z3_fixedpoint_add_rule
