@@ -62,7 +62,8 @@ Library
                          mtl > 2.1,
                          exceptions,
                          monad-control,
-                         transformers-base
+                         transformers-base,
+                         unliftio-core
 
     Build-tools:         hsc2hs
     Extensions:          FlexibleInstances
