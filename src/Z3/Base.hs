@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE PatternGuards #-}
+{-# OPTIONS_GHC -fno-warn-unused-top-binds #-}
 
 -- |
 -- Module    : Z3.Base
