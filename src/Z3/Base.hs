@@ -2919,7 +2919,7 @@ solverGetModel ctx solver =
 
 -- | Retrieve the proof for the failed assertion.
 solverGetProof :: Context -> Solver -> IO AST
-solverGetProof ctx solver = liftFun1 z3_solver_get_proof
+solverGetProof = liftFun1 z3_solver_get_proof
 
 -- | Retrieve the unsat core for the last 'solverCheckAssumptions'; the unsat core is a subset of the assumptions
 solverGetUnsatCore :: Context -> Solver -> IO [AST]
