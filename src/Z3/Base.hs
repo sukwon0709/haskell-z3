@@ -429,6 +429,7 @@ module Z3.Base
   , solverCheck
   , solverCheckAssumptions
   , solverGetModel
+  , solverGetProof
   , solverGetUnsatCore
   , solverGetReasonUnknown
   , solverToString
@@ -2915,6 +2916,10 @@ solverCheckAssumptions ctx solver assump =
 solverGetModel :: Context -> Solver -> IO Model
 solverGetModel ctx solver =
   marshal z3_solver_get_model ctx $ \f -> h2c solver $ \solverPtr -> f solverPtr
+
+-- | Retrieve the proof for the failed assertion.
+solverGetProof :: Context -> Solver -> IO AST
+solverGetProof ctx solver = liftFun1 z3_solver_get_proof
 
 -- | Retrieve the unsat core for the last 'solverCheckAssumptions'; the unsat core is a subset of the assumptions
 solverGetUnsatCore :: Context -> Solver -> IO [AST]

@@ -380,6 +380,7 @@ module Z3.Monad
   , solverCheck
   , solverCheckAssumptions
   , solverGetModel
+  , solverGetProof
   , solverGetUnsatCore
   , solverGetReasonUnknown
   , solverToString
@@ -2282,6 +2283,10 @@ solverCheckAssumptions = liftSolver1 Base.solverCheckAssumptions
 -- or if the result was 'Unsat'.
 solverGetModel :: MonadZ3 z3 => z3 Model
 solverGetModel = liftSolver0 Base.solverGetModel
+
+-- | Retrieve the proof for the failed assertion.
+solverGetProof :: MonadZ3 z3 => z3 AST
+solverGetProof = liftSolver0 Base.solverGetProof
 
 -- | Retrieve the unsat core for the last 'solverCheckAssumptions'; the unsat core is a subset of the assumptions
 solverGetUnsatCore :: MonadZ3 z3 => z3 [AST]
