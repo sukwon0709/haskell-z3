@@ -845,6 +845,14 @@ foreign import ccall unsafe "Z3_mk_seq_suffix"
 foreign import ccall unsafe "Z3_mk_seq_contains"
     z3_mk_seq_contains :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
 
+-- | Reference: <https://z3prover.github.io/api/html/group__capi.html#ga75db89aa47fca45433740b3c233e5252>
+foreign import ccall unsafe "Z3_mk_str_lt"
+    z3_mk_str_lt :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
+-- | Reference: <https://z3prover.github.io/api/html/group__capi.html#ga14ce05dd1b86fd707c342412169955b3>
+foreign import ccall unsafe "Z3_mk_str_le"
+    z3_mk_str_le :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
 -- | Reference: <http://z3prover.github.io/api/html/group__capi.html#gadac00a0fc822e7b2d84ced87a421bae3>
 foreign import ccall unsafe "Z3_mk_seq_extract"
     z3_mk_seq_extract :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)

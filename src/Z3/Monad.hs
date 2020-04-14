@@ -208,6 +208,8 @@ module Z3.Monad
   , mkSeqPrefix
   , mkSeqSuffix
   , mkSeqContains
+  , mkStrLt
+  , mkStrLe
   , mkSeqExtract
   , mkSeqReplace
   , mkSeqAt
@@ -1577,6 +1579,12 @@ mkSeqSuffix = liftFun2 Base.mkSeqSuffix
 
 mkSeqContains :: MonadZ3 z3 => AST -> AST -> z3 AST
 mkSeqContains = liftFun2 Base.mkSeqContains
+
+mkStrLt :: MonadZ3 z3 => AST -> AST -> z3 AST
+mkStrLt = liftFun2 Base.mkStrLt
+
+mkStrLe :: MonadZ3 z3 => AST -> AST -> z3 AST
+mkStrLe = liftFun2 Base.mkStrLe
 
 mkSeqExtract :: MonadZ3 z3 => AST -> AST -> AST -> z3 AST
 mkSeqExtract = liftFun3 Base.mkSeqExtract
