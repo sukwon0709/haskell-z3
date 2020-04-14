@@ -873,6 +873,10 @@ foreign import ccall unsafe "Z3_mk_seq_length"
 foreign import ccall unsafe "Z3_mk_seq_index"
     z3_mk_seq_index :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
 
+-- | Reference: <https://z3prover.github.io/api/html/group__capi.html#gac3ecfaedaf0d6a20b514a15f06dc835d>
+foreign import ccall unsafe "Z3_mk_seq_last_index"
+    z3_mk_seq_last_index :: Ptr Z3_context -> Ptr Z3_ast -> Ptr Z3_ast -> IO (Ptr Z3_ast)
+
 -- | Reference: <http://z3prover.github.io/api/html/group__capi.html#ga2ffdd46dd305ae30ca9244bc64b5b425>
 foreign import ccall unsafe "Z3_mk_str_to_int"
     z3_mk_str_to_int :: Ptr Z3_context -> Ptr Z3_ast -> IO (Ptr Z3_ast)
