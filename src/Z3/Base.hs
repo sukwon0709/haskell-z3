@@ -1661,10 +1661,10 @@ mkSeqContains :: Context -> AST -> AST -> IO AST
 mkSeqContains = liftFun2 z3_mk_seq_contains
 
 mkStrLt :: Context -> AST -> AST -> IO AST
-mkStrLt = liftFun2 Z3_mk_str_lt
+mkStrLt = liftFun2 z3_mk_str_lt
 
 mkStrLe :: Context -> AST -> AST -> IO AST
-mkStrLe = liftFun2 Z3_mk_str_le
+mkStrLe = liftFun2 z3_mk_str_le
 
 mkSeqExtract :: Context -> AST -> AST -> AST -> IO AST
 mkSeqExtract = liftFun3 z3_mk_seq_extract
